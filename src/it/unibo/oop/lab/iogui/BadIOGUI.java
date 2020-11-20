@@ -1,6 +1,7 @@
 package it.unibo.oop.lab.iogui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -9,10 +10,12 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -44,6 +47,16 @@ public class BadIOGUI {
         /*
          * Handlers
          */
+        final JPanel MyPanel = new JPanel();
+       MyPanel.setLayout(new BoxLayout(MyPanel,BoxLayout.X_AXIS));
+        
+       // MyPanel.setLayout(new BorderLayout());
+        canvas.add(MyPanel, BorderLayout.CENTER);
+        MyPanel.add(new JButton("write"));
+       final JButton read = new JButton();
+       MyPanel.add(read);
+       
+        
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -62,6 +75,21 @@ public class BadIOGUI {
                 }
             }
         });
+        read.addActionListener(new ActionListener() {
+        
+        
+        public void actionPerformed(ActionEvent e) {
+            try {
+                PrintStream printStream = new PrintStream(PATH);
+                read.setText( printStream.toString());
+            } catch (FileNotFoundException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            System.out.println("Hai premuto il pulsante!");
+            
+        }
+    });
     }
 
     private void display() {
@@ -82,6 +110,7 @@ public class BadIOGUI {
          * flag makes the OS window manager take care of the default positioning
          * on screen. Results may vary, but it is generally the best choice.
          */
+       // frame.pack();
         frame.setLocationByPlatform(true);
         /*
          * OK, ready to pull the frame onscreen
