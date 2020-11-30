@@ -21,6 +21,11 @@ import javax.swing.WindowConstants;
 public final class SimpleGUI {
 
     private final JFrame frame = new JFrame();
+    
+    public JFrame getFrame() {
+        return frame;
+    }
+
     public void start() {
         frame.setVisible(true);
     }
@@ -37,9 +42,9 @@ public final class SimpleGUI {
          frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
          final ActionListener listner = new ActionListener() {
             
-            
+           
             public void actionPerformed(ActionEvent arg0) {
-                if(arg0.getActionCommand().equals("Save")) {
+            if(arg0.getActionCommand().equals("Save")) {
                     try {
                         ctr.write_in_current(testo.getText());
                     } catch (IOException e) {

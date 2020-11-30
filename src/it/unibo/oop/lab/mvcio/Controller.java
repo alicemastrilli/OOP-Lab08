@@ -26,8 +26,8 @@ public class Controller {
         this.current = fi;
     }
     
-    public String getPath () {
-        return this.getPath();
+    public String getCurrentPath () {
+        return current.getPath();
     }
     
     public void write_in_current(String s) throws IOException {

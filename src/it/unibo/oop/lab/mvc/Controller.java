@@ -1,9 +1,16 @@
 package it.unibo.oop.lab.mvc;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+
 /**
  * A controller that prints strings and has memory of the strings it printed.
  */
 public interface Controller {
+    public void setNextStringToPrint(String NextString);
+    public String getNextStringToPrint();
+    public LinkedList<String> getHistoryPrinted();
+    public void PrintCurrentString();
 
     /*
      * This interface must model a simple controller responsible of I/O access. It

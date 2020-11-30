@@ -1,10 +1,66 @@
 package it.unibo.oop.lab.mvcio2;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import it.unibo.oop.lab.mvcio.Controller;
+import it.unibo.oop.lab.mvcio.SimpleGUI;
+
 /**
  * A very simple program using a graphical interface.
  * 
  */
 public final class SimpleGUIWithFileChooser {
+     private final JFrame frame = new JFrame("My Second Java applications");
+     private SimpleGUIWithFileChooser(final Controller ctr) {
+        final JPanel MyPanel2 = new JPanel();
+        frame.add(MyPanel2);
+        MyPanel2.setLayout(new BorderLayout());
+        final JTextField testo = new JTextField(ctr.getCurrentPath());
+        MyPanel2.add(testo, BorderLayout.CENTER);
+        final JButton bottone = new JButton("Browse...");
+        MyPanel2.add(bottone, BorderLayout.LINE_END);
+        JFileChooser file_choo = new JFileChooser();
+        final ActionListener listener = new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (arg0.getActionCommand().equals("Browse...")) {
+                    int a =file_choo.showSaveDialog(frame);
+                    if ( a == JFileChooser.APPROVE_OPTION) {
+                        ctr.setcurrent(file_choo.getSelectedFile());
+                    }
+                    else if (a == JFileChooser.CANCEL_OPTION) {
+                        
+                    }
+                    else  {
+                        JOptionPane.showMessageDialog(frame, "Error");
+                    }
+                }
+                
+            }
+        };
+       
+        
+    }
+    private void display() {
+            frame.setVisible(true);
+        }
+
+        /**
+         * @param a
+         *            unused
+         */
+        public static void main(final String... a) {
+            final SimpleGUIWithFileChooser gui = new SimpleGUIWithFileChooser(new Controller());
+            gui.display();
+        }
 
     /*
      * TODO: Starting from the application in mvcio:
