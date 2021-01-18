@@ -10,15 +10,13 @@ import java.util.Collection;
  * This code triggers static code analyzers. You should use it to see how things
  * SHOULD NOT be done.
  *
-
+ * @author Danilo Pianini
+ * @version 1.2
  *
  */
-public final class ThisIsHowThingsShouldNotBeDone {
+class ThisIsHowThingsShouldNotBeDone {
 
-     private static final int LUNG_FOR = 43;
-     private ThisIsHowThingsShouldNotBeDone() {
-     }
-     /*
+    /*
      * PMD complains:
      * 
      * This class should be final, because it is a utility class (all methods
@@ -45,7 +43,7 @@ public final class ThisIsHowThingsShouldNotBeDone {
      * 
      * Missing Javadoc
      */
-    public static void main(final String[] a) {
+    public static void main(String[] a) {
         /*
          * PMD Complains:
          * 
@@ -63,15 +61,14 @@ public final class ThisIsHowThingsShouldNotBeDone {
          * 
          * What does it mean "43"? It's a magic number!
          */
-        for (int i = 0; i < LUNG_FOR; i++) {
+        for (int i = 0; i < 43; i++)
             c.add(new Object());
-        }
         /*
          * FindBugs complains
          * 
          * Slow: use clear() instead!
          */
-        c.clear();
+        c.removeAll(c);
     }
 
 }

@@ -1,15 +1,20 @@
 package it.unibo.oop.lab.mvcio2;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import it.unibo.oop.lab.mvcio.Controller;
 import it.unibo.oop.lab.mvcio.SimpleGUI;
@@ -19,48 +24,85 @@ import it.unibo.oop.lab.mvcio.SimpleGUI;
  * 
  */
 public final class SimpleGUIWithFileChooser {
-     private final JFrame frame = new JFrame("My Second Java applications");
-     private SimpleGUIWithFileChooser(final Controller ctr) {
-        final JPanel MyPanel2 = new JPanel();
-        frame.add(MyPanel2);
-        MyPanel2.setLayout(new BorderLayout());
-        final JTextField testo = new JTextField(ctr.getCurrentPath());
-        MyPanel2.add(testo, BorderLayout.CENTER);
-        final JButton bottone = new JButton("Browse...");
-        MyPanel2.add(bottone, BorderLayout.LINE_END);
-        JFileChooser file_choo = new JFileChooser();
-        final ActionListener listener = new ActionListener() {
+    private JFrame frame = new JFrame();
+    public SimpleGUIWithFileChooser(Controller ctr) {
+        //frame.setVisible(true);
+        frame.setLayout(new BorderLayout());
+        JTextArea text = new JTextArea();
+        JButton save = new JButton("Save");
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(save, BorderLayout.SOUTH);
+        panel.add(text, BorderLayout.NORTH);
+        final JTextField field = new JTextField(ctr.getCurrent().toString());
+        JButton Browse = new JButton("Browse..");
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel2.add(field, BorderLayout.CENTER);
+        panel.add(Browse, BorderLayout.LINE_END);
+        field.setEditable(false);;
+        frame.add(panel);
+        frame.add(panel2, BorderLayout.NORTH);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        Browse.addActionListener(new ActionListener() {
+            
+            @Override
             public void actionPerformed(ActionEvent arg0) {
-                if (arg0.getActionCommand().equals("Browse...")) {
-                    int a =file_choo.showSaveDialog(frame);
-                    if ( a == JFileChooser.APPROVE_OPTION) {
-                        ctr.setcurrent(file_choo.getSelectedFile());
-                    }
-                    else if (a == JFileChooser.CANCEL_OPTION) {
-                        
-                    }
-                    else  {
-                        JOptionPane.showMessageDialog(frame, "Error");
-                    }
+                JFileChooser chooser = new JFileChooser();
+                
+                int a = chooser.showSaveDialog(Browse);
+                if (a==JFileChooser.APPROVE_OPTION) {
+                    ctr.setAsCurrent(chooser.getSelectedFile());
+                    
                 }
+                else if(a == JFileChooser.CANCEL_OPTION) {}
+                else {
+                    JOptionPane.showMessageDialog(Browse, "Errore");
+                }
+                // TODO Auto-generated method stub
                 
             }
-        };
-       
+        });
+        save.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                try {
+                    ctr.write(text.getText());
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+        /*
+         * Make the frame half the resolution of the screen. This very method is
+         * enough for a single screen setup. In case of multiple monitors, the
+         * primary is selected.
+         * 
+         * In order to deal coherently with multimonitor setups, other
+         * facilities exist (see the Java documentation about this issue). It is
+         * MUCH better than manually specify the size of a window in pixel: it
+         * takes into account the current resolution.
+         */
+        final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        final int sw = (int) screen.getWidth();
+        final int sh = (int) screen.getHeight();
+        frame.setSize(sw / 2, sh / 2);
+        /*
+         * Instead of appearing at (0,0), upper left corner of the screen, this
+         * flag makes the OS window manager take care of the default positioning
+         * on screen. Results may vary, but it is generally the best choice.
+         */
+        frame.setLocationByPlatform(true);
+    }
+
+    public static void main(final String... a ) {
+        final SimpleGUIWithFileChooser gui = new SimpleGUIWithFileChooser(new Controller());
+        gui.frame.setVisible(true);
         
     }
-    private void display() {
-            frame.setVisible(true);
-        }
-
-        /**
-         * @param a
-         *            unused
-         */
-        public static void main(final String... a) {
-            final SimpleGUIWithFileChooser gui = new SimpleGUIWithFileChooser(new Controller());
-            gui.display();
-        }
 
     /*
      * TODO: Starting from the application in mvcio:

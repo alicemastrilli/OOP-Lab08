@@ -1,7 +1,6 @@
 package it.unibo.oop.lab.iogui;
 
 import java.awt.BorderLayout;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
 /**
  * This class is a simple application that writes a random number on a file.
  * 
@@ -25,7 +23,7 @@ import javax.swing.JPanel;
  * applications.
  */
 public class BadIOGUI {
-
+ 
     private static final String TITLE = "A very simple GUI application";
     private static final String PATH = System.getProperty("user.home")
             + System.getProperty("file.separator")
@@ -33,7 +31,7 @@ public class BadIOGUI {
     private static final int PROPORTION = 5;
     private final Random rng = new Random();
     private final JFrame frame = new JFrame(TITLE);
-
+    private int s;
     /**
      * 
      */
@@ -47,18 +45,23 @@ public class BadIOGUI {
         /*
          * Handlers
          */
-        final JPanel MyPanel = new JPanel();
-       MyPanel.setLayout(new BoxLayout(MyPanel,BoxLayout.X_AXIS));
-        
-       // MyPanel.setLayout(new BorderLayout());
-        canvas.add(MyPanel, BorderLayout.CENTER);
-        MyPanel.add(new JButton("write"));
-       final JButton read = new JButton();
-       MyPanel.add(read);
-       
-        
-        write.addActionListener(new ActionListener() {
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        frame.setContentPane(panel);
+        panel.add(write, BorderLayout.CENTER);
+        final JButton read = new JButton("Read");
+        panel.add(read);
+        read.addActionListener(new ActionListener() {
+            
             @Override
+            public void actionPerformed(ActionEvent arg0) {
+                System.out.println("Hai premuto il pulsante, ho scritto:" +s);
+                
+            }
+        });
+        write.addActionListener(new ActionListener() {
+         
+            
             public void actionPerformed(final ActionEvent e) {
                 /*
                  * This would be VERY BAD in a real application.
@@ -68,28 +71,14 @@ public class BadIOGUI {
                  * your UI becomes completely unresponsive.
                  */
                 try (PrintStream ps = new PrintStream(PATH)) {
-                    ps.print(rng.nextInt());
+                   s=rng.nextInt();
+                    ps.print(s);
                 } catch (FileNotFoundException e1) {
                     JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
                     e1.printStackTrace();
                 }
             }
         });
-        read.addActionListener(new ActionListener() {
-        
-        
-        public void actionPerformed(ActionEvent e) {
-            try {
-                PrintStream printStream = new PrintStream(PATH);
-                read.setText( printStream.toString());
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-            System.out.println("Hai premuto il pulsante!");
-            
-        }
-    });
     }
 
     private void display() {
@@ -110,12 +99,12 @@ public class BadIOGUI {
          * flag makes the OS window manager take care of the default positioning
          * on screen. Results may vary, but it is generally the best choice.
          */
-       // frame.pack();
         frame.setLocationByPlatform(true);
         /*
          * OK, ready to pull the frame onscreen
          */
         frame.setVisible(true);
+        frame.pack();
     }
 
     /**

@@ -5,6 +5,7 @@ package it.unibo.oop.lab.simplegui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -14,9 +15,7 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -31,7 +30,6 @@ public class MiniGUI {
     private static final int PROPORTION = 5;
     private final Random rng = new Random();
     private final JFrame frame = new JFrame(TITLE);
-    private final JTextField risult = new JTextField();
 
     /**
      * 
@@ -46,19 +44,21 @@ public class MiniGUI {
         /*
          * Handlers
          */
-        final JPanel MioPan = new JPanel();
-        MioPan.setLayout(new BoxLayout(MioPan, BoxLayout.X_AXIS));
-        canvas.add(MioPan, BorderLayout.CENTER);
-        MioPan.add(write);
-        canvas.add(risult, BorderLayout.NORTH);
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        frame.add(panel);
+        panel.add(write);
+        
+        final TextField result = new TextField();
+        frame.add(result, BorderLayout.NORTH);
         write.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
-                int x = rng.nextInt();
-                System.out.println(x);
-                MiniGUI.this.risult.setText(Integer.toString(x));
+                int s = rng.nextInt();
+                System.out.println(s);
+                result.setText(Integer.toString(s));
             }
         });
-   
     }
 
     private void display() {

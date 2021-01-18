@@ -2,11 +2,10 @@ package it.unibo.oop.lab.mvc;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Panel;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,20 +16,20 @@ import javax.swing.WindowConstants;
 
 import it.unibo.oop.lab.mvcio.ControllerImpl;
 
-
 /**
  * A very simple program using a graphical interface.
  * 
  */
-public final class SimpleGUI {
+public final class SimpleGUI{
+    private final JFrame frame = new JFrame(); 
 
-    private final JFrame frame = new JFrame("mvc");
+    private JTextField field = new JTextField();
+    private JTextArea area = new JTextArea();
+    private JButton print = new JButton("Print");
+    private JButton show = new JButton("Show History");
+    private JPanel panel = new JPanel();
     
-    public void start() {
-        frame.setVisible(true);
-    }
-   
-
+  
     /*
      * Once the Controller is done, implement this class in such a way that:
      * 
@@ -55,35 +54,35 @@ public final class SimpleGUI {
     /**
      * builds a new {@link SimpleGUI}.
      */
-    public SimpleGUI(Controller ctr) {
-         final JPanel panel = new JPanel();
-         frame.add(panel);
-         panel.setLayout(new BorderLayout());
-         final JTextField testo = new JTextField();
-         final JTextArea area_testo = new JTextArea();
-         panel.add(testo, BorderLayout.NORTH);
-         panel.add(area_testo, BorderLayout.CENTER);
-         final JButton print = new JButton("Print");
-         final JButton show = new JButton("Show history");
-         panel.add(print, BorderLayout.SOUTH);
-         panel.add(show, BorderLayout.SOUTH);
-         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-         
-         final ActionListener listener = new ActionListener() {
-            public void actionPerformed(final ActionEvent arg0) {
-                if(arg0.getActionCommand().equals("Print")) {
-                    System.out.println(testo.getText());
-                }
-                if(arg0.getActionCommand().equals("Show history")) {
-                   area_testo.setText(ctr.getHistoryPrinted().toString());
-                }
-                
+    public SimpleGUI(ControllerImpl ctr) {
+        panel.setLayout(new BorderLayout());
+        panel.add(field, BorderLayout.NORTH);
+        panel.add(area, BorderLayout.CENTER);
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel2.add(print, BorderLayout.WEST);
+        panel2.add(show, BorderLayout.EAST);
+        frame.add(panel, BorderLayout.NORTH);
+        frame.add(panel2, BorderLayout.SOUTH);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        print.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                ctr.SetString(field.getText());
+                ctr.PrintCurrent();
             }
-         };
-         print.setActionCommand("Print");
-         show.setActionCommand("Show history");
-         print.addActionListener(listener);
-         show.addActionListener(listener);
+        });
+        show.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                int i = ctr.History().size();
+                for(String s : ctr.History()) {
+                    area.append(s);;
+                }
+            }
+        });
         /*
          * Make the frame half the resolution of the screen. This very method is
          * enough for a single screen setup. In case of multiple monitors, the
@@ -106,9 +105,8 @@ public final class SimpleGUI {
          */
         frame.setLocationByPlatform(true);
     }
-    
-    static final void main (final String[] args) {
-        new SimpleGUI(new ControllerImpl()).start();
-        
+    public static void main (String ...a) {
+        SimpleGUI gui = new SimpleGUI(new ControllerImpl());
+        gui.frame.setVisible(true);
     }
 }

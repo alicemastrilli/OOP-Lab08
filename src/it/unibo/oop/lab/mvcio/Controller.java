@@ -1,39 +1,33 @@
 package it.unibo.oop.lab.mvcio;
 
-
+import java.io.DataOutputStream;
 import java.io.File;
-
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.io.PrintStream;
+import java.io.OutputStream;
 
 /**
  * 
  */
-public class Controller {
+public class Controller { 
     
-    private static final String HOME = System.getProperty("user.home");
-    private static final String SEPARATOR = System.getProperty("file.separator");
-    private static final String DEFAULT_FILE = "output.txt";
-    
-    private File current = new File(HOME + SEPARATOR + DEFAULT_FILE);
-    
+    private File current = new File (System.getProperty("user.home") + System.getProperty("file.separator") + "output.txt");
+    public void setAsCurrent(File file) {
+        this.current = file;
+    }
     public File getCurrent() {
-        return current;
+        return this.current;
     }
-
-    public void setcurrent (File fi) {
-        this.current = fi;
-    }
-    
-    public String getCurrentPath () {
+    public String getPath() {
         return current.getPath();
     }
-    
-    public void write_in_current(String s) throws IOException {
-        try (PrintStream out = new PrintStream(current)){
-            out.println(s);
-             }
+    public void write(String s) throws IOException{
+        try (
+            final OutputStream file = new FileOutputStream(current);
+            final DataOutputStream dstream = new DataOutputStream(file);
+        ){
+            dstream.writeChars(s);
+        }
     }
 
     /*
